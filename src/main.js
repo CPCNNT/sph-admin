@@ -17,12 +17,14 @@ import '@/permission' // permission control
 
 import API from '@/api'
 
+import CategorySelect from '@/components/CategorySelect'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
  * you can execute: mockXHR()
  *
- * Currently MockJs will be used in the production environment,
+ * Currently, MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
 if (process.env.NODE_ENV === 'production') {
@@ -38,6 +40,8 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 Vue.prototype.$API = API
+
+Vue.component(CategorySelect.name, CategorySelect)
 
 new Vue({
   el: '#app',

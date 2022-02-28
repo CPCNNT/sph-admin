@@ -9,7 +9,3 @@ export default {
   name: 'Sku'
 }
 </script>
-
-<style lang="sass" scoped>
-
-</style>
