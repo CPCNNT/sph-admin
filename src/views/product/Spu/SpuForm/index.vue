@@ -78,7 +78,7 @@
           </el-table-column>
 
           <el-table-column prop="prop" label="操作" width="100px">
-            <template v-slot="{row, $index}">
+            <template v-slot="{$index}">
               <el-button type="danger" icon="el-icon-delete" @click="deleteSaleAttr($index)" />
             </template>
           </el-table-column>
@@ -216,11 +216,11 @@ export default {
         await this.$API.spu.reqAddSpuInfo(this.spuInfo)
       }
       this.$message({ type: 'success', message: '修改 spu 成功！' })
-      this.$emit('changeScene', { scene: 0, flag: this.spuInfo.id ? '修改' : '添加' })
+      this.$emit('changeSceneSpuForm', { scene: 0, flag: this.spuInfo.id ? '修改' : '添加' })
       Object.assign(this._data, this.$options.data()) // 清除残留数据
     },
     cancel() {
-      this.$emit('changeScene', { scene: 0, flag: '' })
+      this.$emit('changeSceneSpuForm', { scene: 0, flag: '' })
       Object.assign(this._data, this.$options.data()) // 清除残留数据
     }
   }

@@ -16,24 +16,16 @@
           <el-table-column prop="description" label="Spu 描述" width="" />
 
           <el-table-column prop="prop" label="操作" width="280px">
-            <template v-slot="{ row, $index }" class="bottom">
-              <el-tooltip effect="light" content="添加 sku" placement="bottom">
-                <el-button type="success" icon="el-icon-plus" @click="addSku(row)" />
-              </el-tooltip>
+            <template v-slot="{ row }" class="bottom">
+              <el-button type="success" icon="el-icon-plus" title="添加 sku" @click="addSku(row)" />
 
-              <el-tooltip effect="light" content="修改 spu" placement="bottom">
-                <el-button type="warning" icon="el-icon-edit" @click="updateSpu(row)" />
-              </el-tooltip>
+              <el-button type="warning" icon="el-icon-edit" title="修改 spu" @click="updateSpu(row)" />
 
-              <el-tooltip effect="light" content="查看当前 spu 全部 sku 列表" placement="bottom">
-                <el-button type="info" icon="el-icon-info" />
-              </el-tooltip>
+              <el-button type="info" icon="el-icon-info" title="查看当前 spu 全部 sku 列表" @click="lookUpSkuList(row)" />
 
-              <el-tooltip effect="light" content="删除 spu" placement="bottom">
-                <el-popconfirm :title="`确定删除 ${row.spuName} 吗？`" @onConfirm="deleteSpu(row)">
-                  <el-button slot="reference" type="danger" icon="el-icon-delete" style="margin-left: 10px" />
-                </el-popconfirm>
-              </el-tooltip>
+              <el-popconfirm :title="`确定删除 ${row.spuName} 吗？`" @onConfirm="deleteSpu(row)">
+                <el-button slot="reference" type="danger" icon="el-icon-delete" style="margin-left: 10px" title="删除 spu" />
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -51,10 +43,23 @@
         />
       </div>
 
-      <SpuForm v-show="scene === 1" @changeScene="changeScene" ref="spuform" />
+      <SpuForm v-show="scene === 1" ref="spuform" @changeSceneSpuForm="changeSceneSpuForm" />
 
-      <SkuForm v-show="scene === 2" />
+      <SkuForm v-show="scene === 2" ref="skuForm" @changeSceneSkuForm="changeSceneSkuForm" />
     </el-card>
+
+    <el-dialog :title="`${tempSpuName} 的 sku 列表`" :visible.sync="dialogTableVisible" @close="closeDialog">
+      <el-table :data="skuList" v-loading="loading" border>
+        <el-table-column property="skuName" label="名称" width=""></el-table-column>
+        <el-table-column property="price" label="价格" width=""></el-table-column>
+        <el-table-column property="weight" label="重量" width=""></el-table-column>
+        <el-table-column property="" label="默认图片" width="">
+          <template slot-scope="{ row }">
+            <img :src="row.skuDefaultImg" :alt="row.skuDesc" style="width: 100px; height: 100px">
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,10 +69,7 @@ import SkuForm from './SkuForm'
 
 export default {
   name: 'Spu',
-  components: {
-    SpuForm,
-    SkuForm
-  },
+  components: { SpuForm, SkuForm },
   data() {
     return {
       category1Id: '',
@@ -77,7 +79,11 @@ export default {
       totalCount: 0,
       pageSize: 3,
       spuList: [],
-      scene: 0 // 0 代表展示 spu 列表数据，1 代表添加 SPU | 修改 SPU，2 代表添加 SKU
+      scene: 0, // 0 代表展示 spu 列表数据，1 代表添加 SPU | 修改 SPU，2 代表添加 SKU
+      dialogTableVisible: false,
+      skuList: [],
+      tempSpuName: '',
+      loading: true
     }
   },
   methods: {
@@ -115,7 +121,7 @@ export default {
       this.scene = 1
       this.$refs.spuform.initSpuFormData(row)
     },
-    changeScene({ scene, flag }) {
+    changeSceneSpuForm({ scene, flag }) {
       this.scene = scene
       if (flag === '添加') {
         this.pageNum = 1
@@ -135,6 +141,23 @@ export default {
     },
     addSku(row) {
       this.scene = 2
+      this.$refs.skuForm.getSkuFormData(this.category1Id, this.category2Id, row)
+    },
+    changeSceneSkuForm(scene) {
+      this.scene = scene
+    },
+    async lookUpSkuList(spu) {
+      // console.log(spu)
+      this.dialogTableVisible = true
+      this.tempSpuName = spu.spuName
+      const res = await this.$API.spu.reqSkuList(spu.id)
+      this.skuList = res.data
+      this.loading = false
+    },
+    closeDialog() {
+      this.loading = true
+      this.tempSpuName = ''
+      this.skuList = []
     }
   }
 }

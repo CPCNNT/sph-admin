@@ -50,3 +50,27 @@ export const reqDeleteSpu = spuId => request({
   url: `/admin/product/deleteSpu/${spuId}`,
   method: 'delete'
 })
+
+// 获取 skuForm 信息
+export const reqSpuSaleAttrList = spuId => request({
+  url: `/admin/product/spuSaleAttrList/${spuId}`,
+  method: 'get'
+})
+
+export const reqAttrInfoList = (category1Id, category2Id, category3Id) => request({
+  url: `/admin/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
+  method: 'get'
+})
+
+// 添加 sku
+export const reqAddSku = skuInfo => request({
+  url: '/admin/product/saveSkuInfo',
+  data: skuInfo,
+  method: 'post'
+})
+
+// 获取 sku 列表数据
+export const reqSkuList = spuId => request({
+  url: `/admin/product/findBySpuId/${spuId}`,
+  method: 'get'
+})
