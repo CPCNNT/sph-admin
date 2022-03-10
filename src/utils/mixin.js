@@ -1,4 +1,5 @@
 import * as echarts from "echarts"
+import { mapState } from "vuex"
 
 export default {
   data() {
@@ -6,6 +7,11 @@ export default {
       echartsInstance: null,
       resizeObserver: null
     }
+  },
+  computed: {
+    ...mapState({
+      dashboardData: state => state.dashboard.dashboardData
+    })
   },
   mounted() {
     this.echartsInstance = echarts.init(this.$refs.chart)
@@ -27,6 +33,11 @@ export default {
     // this.$once('hook:beforeDestroy', () => {
     //   this.resizeObserver.disconnect()
     // })
+  },
+  watch: {
+    dashboardData() {
+      this.echartsInstance.setOption(this.setOption)
+    }
   },
   beforeDestroy() {
     this.resizeObserver.disconnect()

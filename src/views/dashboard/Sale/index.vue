@@ -33,10 +33,10 @@
         <el-col :span="6">
           <div style="padding-bottom: 20px">门店{{ activeName }}排名</div>
           <ol>
-            <li v-for="(item, index) in rankData" :key="index">
-              <span>{{ index + 1 }}</span>
-              <span>{{ item.brand }}</span>
-              <span>{{ item.val }}</span>
+            <li v-for="item in rankData" :key="item.no">
+              <span>{{ item.no }}</span>
+              <span>{{ item.name }}</span>
+              <span>{{ item.money }}</span>
             </li>
           </ol>
         </el-col>
@@ -46,8 +46,9 @@
 </template>
 
 <script>
+  import mixin from '@/utils/mixin'
   import dayjs from 'dayjs'
-  import mixin from '../mixin'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: "Sale",
@@ -56,31 +57,65 @@
       return {
         activeName: "销售额",
         date: [],
-        sale: {
-          chartData: [410, 90, 200, 340, 390, 335, 220, 160, 91, 198, 140, 290],
-          rankData: [
-            {brand: '肯德基', val: '323,234'},
-            {brand: '麦当劳', val: '299,132'},
-            {brand: '汉堡王', val: '283,998'},
-            {brand: '海底捞', val: '266,223'},
-            {brand: '西贝莜面村', val: '223,445'},
-            {brand: '支云餐厅', val: '219,663'},
-            {brand: '真功夫', val: '200,997'},
-          ],
-        },
-        visit: {
-          chartData: [115, 130, 90, 220, 175, 215, 190, 95, 87, 120, 250, 310],
-          rankData: [
-            {brand: '麦当劳', val: '211,335'},
-            {brand: '肯德基', val: '210,597'},
-            {brand: '必胜客', val: '200,998'},
-            {brand: '海底捞', val: '199,220'},
-            {brand: '西贝莜面村', val: '195,444'},
-            {brand: '汉堡王', val: '180,161'},
-            {brand: '真功夫', val: '172,995'},
-          ],
-        },
         format: 'YYYY-MM-DD'
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'orderFullYearAxis',
+        'userFullYearAxis',
+        'orderFullYear',
+        'userFullYear',
+        'orderRank',
+        'userRank'
+      ]),
+      setOption() {
+        return {
+          title: {
+            text: `${this.activeName}趋势`,
+            textStyle: {
+              fontSize: "1em",
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow"
+            }
+          },
+          grid: {
+            left: "3%",
+            right: "3%",
+            bottom: "0%",
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: this.activeName === '销售额' ? this.orderFullYearAxis : this.userFullYearAxis,
+              axisTick: {
+                alignWithLabel: true
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: "value"
+            }
+          ],
+          series: [
+            {
+              name: this.activeName,
+              type: "bar",
+              barWidth: "35%",
+              data: this.activeName === '销售额' ? this.orderFullYear : this.userFullYear
+            }
+          ]
+        }
+      },
+      rankData() {
+        return this.activeName === '销售额' ? this.orderRank : this.userRank
       }
     },
     methods: {
@@ -107,56 +142,6 @@
         const start = dayjs().startOf('year').format(this.format)
         const end = dayjs().endOf('year').format(this.format)
         this.date = [start, end]
-      }
-    },
-    computed: {
-      setOption() {
-        return {
-          title: {
-            text: `${this.activeName}趋势`,
-            textStyle: {
-              fontSize: "1em",
-              fontWeight: "bold"
-            }
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "shadow"
-            }
-          },
-          grid: {
-            left: "3%",
-            right: "3%",
-            bottom: "0%",
-            containLabel: true
-          },
-          xAxis: [
-            {
-              type: "category",
-              data: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-              axisTick: {
-                alignWithLabel: true
-              }
-            }
-          ],
-          yAxis: [
-            {
-              type: "value"
-            }
-          ],
-          series: [
-            {
-              name: this.activeName,
-              type: "bar",
-              barWidth: "35%",
-              data: this.activeName === '销售额' ? this.sale.chartData : this.visit.chartData
-            }
-          ]
-        }
-      },
-      rankData() {
-        return this.activeName === '销售额' ? this.sale.rankData : this.visit.rankData
       }
     }
   }

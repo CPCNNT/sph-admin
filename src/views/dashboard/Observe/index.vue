@@ -1,0 +1,22 @@
+<template>
+  <div>
+    <el-row :gutter="20" style="margin-top: 20px;">
+      <el-col :span="12">
+        <Search />
+      </el-col>
+      <el-col :span="12">
+        <Category />
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+  import Search from './Search'
+  import Category from './Category'
+
+  export default {
+    name: 'Observe',
+    components: { Search, Category }
+  }
+</script>
