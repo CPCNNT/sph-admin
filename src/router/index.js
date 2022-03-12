@@ -53,17 +53,18 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
+  }
 
+  // 404 page must be placed at the end !!!
+]
+
+export const asyncRoutes = [
   {
     name: 'Acl',
     path: '/acl',
     component: Layout,
     redirect: '/acl/user/list',
-    meta: {
-      title: '权限管理',
-      icon: 'el-icon-lock'
-    },
+    meta: { title: '权限管理', icon: 'el-icon-lock' },
     children: [
       {
         name: 'User',
@@ -110,7 +111,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'tradeMark',
-        name: 'TradeMark',
+        name: 'Trademark',
         component: () => import('@/views/product/TradeMark'),
         meta: { title: '品牌管理' }
       },
@@ -135,9 +136,29 @@ export const constantRoutes = [
     ]
   },
 
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true },
+  {
+    path: '/test',
+    component: Layout,
+    name: 'Test',
+    meta: { title: '测试管理', icon: 'el-icon-lollipop' },
+    children: [
+      {
+        path: 'test1',
+        name: 'Test1',
+        component: () => import('@/views/Test/Test1'),
+        meta: { title: '测试管理1' }
+      },
+      {
+        path: 'test2',
+        name: 'Test2',
+        component: () => import('@/views/Test/Test2'),
+        meta: { title: '测试管理2' }
+      },
+    ]
+  },
 ]
+
+export const anyRoutes = { path: '*', redirect: '/404', hidden: true }
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

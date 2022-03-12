@@ -14,6 +14,7 @@
     <el-button @click="$router.replace({ name: 'Role' })">取消</el-button>
   </div>
 </template>
+
 <script>
   export default {
     name: 'roleAuth',
@@ -35,16 +36,16 @@
 
     methods: {
       /*
-        初始化
-        */
+            初始化
+            */
       init() {
         const roleId = this.$route.params.id
         this.getPermissions(roleId)
       },
 
       /*
-        获取指定角色的权限列表
-        */
+            获取指定角色的权限列表
+            */
       getPermissions(roleId) {
         this.$API.permission.toAssign(roleId).then((result) => {
           const allPermissions = result.data.children
@@ -56,8 +57,8 @@
       },
 
       /*
-        得到所有选中的id列表
-        */
+            得到所有选中的id列表
+            */
       getCheckedIds(auths, initArr = []) {
         return auths.reduce((pre, item) => {
           if (item.select && item.level === 4) {
@@ -70,22 +71,22 @@
       },
 
       /*
-        保存权限列表
-        */
+            保存权限列表
+            */
       save() {
         var ids = this.$refs.tree.getCheckedKeys().join(',')
         /*
-          vue elementUI tree树形控件获取父节点ID的实例
-          修改源码:
-          情况1: element-ui没有实现按需引入打包
-            node_modules\element-ui\lib\element-ui.common.js    25382行修改源码  去掉 'includeHalfChecked &&'
-            // if ((child.checked || includeHalfChecked && child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
-            if ((child.checked || child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
-          情况2: element-ui实现了按需引入打包
-            node_modules\element-ui\lib\tree.js    1051行修改源码  去掉 'includeHalfChecked &&'
-            // if ((child.checked || includeHalfChecked && child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
-            if ((child.checked || child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
-          */
+              vue elementUI tree树形控件获取父节点ID的实例
+              修改源码:
+              情况1: element-ui没有实现按需引入打包
+                node_modules\element-ui\lib\element-ui.common.js    25382行修改源码  去掉 'includeHalfChecked &&'
+                // if ((child.checked || includeHalfChecked && child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
+                if ((child.checked || child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
+              情况2: element-ui实现了按需引入打包
+                node_modules\element-ui\lib\tree.js    1051行修改源码  去掉 'includeHalfChecked &&'
+                // if ((child.checked || includeHalfChecked && child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
+                if ((child.checked || child.indeterminate) && (!leafOnly || leafOnly && child.isLeaf)) {
+              */
         this.loading = true
         this.$API.permission
           .doAssign(this.$route.params.id, ids)

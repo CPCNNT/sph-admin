@@ -43,9 +43,7 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-          />
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
@@ -54,8 +52,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >点击登录</el-button
-      >
+      >点击登录</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">username: admin</span>
@@ -126,8 +123,7 @@
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             this.loading = true
-            this.$store
-              .dispatch('user/login', this.loginForm)
+            this.$store.dispatch('user/login', this.loginForm)
               .then(() => {
                 this.$router.push({ path: this.redirect || '/' })
                 this.loading = false

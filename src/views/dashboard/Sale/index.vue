@@ -168,12 +168,12 @@
   }
 
   .right span {
-    color: #409EFF;
+    /* color: black; */
     cursor: pointer;
   }
 
   .right span:hover {
-    color: black;
+    color: #409EFF;
   }
 
   .date {

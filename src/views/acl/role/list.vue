@@ -21,7 +21,7 @@
     <el-table
       border
       stripe
-      style="width: 960px"
+      
       v-loading="listLoading"
       :data="roles"
       @selection-change="handleSelectionChange"
@@ -32,40 +32,37 @@
 
       <el-table-column label="角色名称">
         <template slot-scope="{ row }">
-          <template v-if="row.edit">
-            <el-input v-model="row.roleName" class="edit-input" size="small" />
+          <div class="inp-btn" v-if="row.edit">
+            <el-input v-model="row.roleName" />
             <el-button
               class="cancel-btn"
-              size="small"
               icon="el-icon-refresh"
               type="warning"
+              size="medium"
               @click="cancelEdit(row)"
             >取消</el-button>
-          </template>
+          </div>
           <span v-else>{{ row.roleName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="操作" width="300" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            size="mini"
+          <el-button      
             type="info"
             icon="el-icon-info"
             title="分配权限"
             @click="$router.push(`/acl/role/auth/${row.id}?roleName=${row.roleName}`)"
           />
 
-          <el-button
-            size="mini"
+          <el-button            
             type="primary"
             icon="el-icon-check"
             title="确定"
             @click="updateRole(row)"
             v-if="row.edit"
           />
-          <el-button
-            size="mini"
+          <el-button            
             type="primary"
             icon="el-icon-edit"
             title="修改角色"
@@ -73,8 +70,7 @@
             v-if="!row.edit"
           />
 
-          <el-button
-            size="mini"
+          <el-button            
             type="danger"
             icon="el-icon-delete"
             title="删除角色"
@@ -90,7 +86,7 @@
       :total="total"
       :page-size="limit"
       :page-sizes="[5, 10, 20, 30, 40, 50, 100]"
-      style="padding: 20px 0;"
+      style="padding: 20px 0; text-align: center;"
       layout="prev, pager, next, jumper, sizes, total"
       @current-change="getRoles"
       @size-change="handleSizeChange"
@@ -272,13 +268,13 @@
 </script>
 
 <style scoped>
-  .edit-input {
-    padding-right: 100px;
+  .inp-btn {
+    display: flex;
+    /* justify-content: space-around; */
+    align-items: center;
   }
   .cancel-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
+    margin-left: 20px;
   }
   ::v-deep .el-pagination__sizes {
     margin-left: 24px;
