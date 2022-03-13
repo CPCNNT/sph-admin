@@ -33,8 +33,20 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           await store.dispatch('user/getInfo')
+          
+          // let toName = to.path.split('/').pop()
+          // toName = toName.charAt(0).toUpperCase() + toName.slice(1)
 
-          next()
+          // console.log(store.state.user.routes)
+          // console.log(toName)
+
+          // if (store.state.user.routes.indexOf(toName) === -1) {
+          //   next({ path: '/' })
+          // } else {
+          //   next()
+          // }
+
+          next({ path: '/' })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

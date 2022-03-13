@@ -41,6 +41,10 @@ module.exports = {
       '/dev-api': {
         target: 'http://39.98.123.211',
         pathRewrite: { '^/dev-api': '' }
+      },
+      '/prod-api': {
+        target: 'http://39.98.123.211',
+        pathRewrite: { '^/prod-api': '' }
       }
     },
     // before: require('./mock/mock-server.js') // 开启 mock 数据
